@@ -3,32 +3,29 @@
 <head>
   <title>Paper Processor Extension</title>
   <style>
-html, body {
+    html, body {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(to bottom right, #f5f5f5, #eaeaea);
-      width: 400px;
-      height: 600px;
-      overflow: hidden;
     }
 
     #container {
       box-sizing: border-box;
-      width: 100%;
-      height: 100%;
-      padding: 20px;
+      width: 400px;
+      padding: 10px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
+      overflow-y: auto;
+      max-height: 600px;
     }
 
     h1 {
       margin-top: 0;
       font-size: 1.2em;
       color: #333;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     label {
@@ -40,8 +37,8 @@ html, body {
 
     input[type="text"] {
       width: 100%;
-      padding: 8px;
-      margin-bottom: 20px;
+      padding: 6px;
+      margin-bottom: 10px;
       box-sizing: border-box;
       border-radius: 5px;
       border: 1px solid #ccc;
@@ -50,14 +47,15 @@ html, body {
 
     textarea {
       width: 100%;
-      padding: 8px;
+      padding: 6px;
       box-sizing: border-box;
       border-radius: 5px;
       border: 1px solid #ccc;
       font-family: Arial, sans-serif;
       font-size: 0.9em;
       resize: none;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
+      height: 80px;
     }
 
     button {
@@ -65,8 +63,8 @@ html, body {
       color: #fff;
       border: none;
       border-radius: 5px;
-      padding: 10px 15px;
-      margin-bottom: 20px;
+      padding: 8px 12px;
+      margin-bottom: 10px;
       font-size: 0.9em;
       cursor: pointer;
       box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -79,50 +77,36 @@ html, body {
 
     .section {
       width: 100%;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       background: #fff;
       border-radius: 10px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      padding: 15px;
+      padding: 10px;
     }
 
     .section h2 {
       margin-top: 0;
-      margin-bottom: 10px;
+      margin-bottom: 5px;
       font-size: 1em;
       color: #444;
       border-bottom: 1px solid #eee;
       padding-bottom: 5px;
     }
 
-    .button-group {
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
-    }
     #imagesContainer {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      max-height: 150px;
+      gap: 5px;
+      max-height: 80px;
       overflow-y: auto;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     .draggable-image {
-      width: 80px;
-      height: auto;
+      width: 30px;
+      height: 30px;
+      object-fit: cover;
       cursor: move;
-    }
-
-    #referencesSelect {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 0.9em;
     }
   </style>
 </head>
@@ -133,36 +117,24 @@ html, body {
       <h2>Configuration</h2>
       <label for="pdfUrl">PDF URL:</label>
       <input type="text" id="pdfUrl" name="pdfUrl" placeholder="Enter the PDF URL...">
-  
-      <label for="apiKey">OpenAI API Key:</label>
-      <input type="text" id="apiKey" name="apiKey" placeholder="Enter your OpenAI API Key...">
-  
+
       <button id="goButton">Process Paper</button>
     </div>
-  
+
     <div class="section">
       <h2>Extracted Text</h2>
-      <textarea id="extractedText" rows="6" placeholder="Extracted text will appear here..."></textarea>
+      <textarea id="extractedText" placeholder="Extracted text will appear here..."></textarea>
       <button id="copyButton">Copy Text</button>
     </div>
-  
+
     <div class="section">
       <h2>Extracted Images</h2>
       <div id="imagesContainer">
         <!-- Images will be injected here -->
       </div>
     </div>
-  
-    <div class="section">
-      <h2>References</h2>
-      <button id="processReferencesButton">Process References</button>
-      <select id="referencesSelect">
-        <!-- Reference options will be added here -->
-      </select>
-      <textarea id="referenceText" rows="6" placeholder="Reference text will appear here..."></textarea>
-    </div>
   </div>
-  
+
   <script src="popup.js"></script>
 </body>
 </html>

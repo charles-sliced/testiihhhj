@@ -19,9 +19,10 @@ app.post('/processPaper', async (req, res) => {
   let { pdfUrl, apiKey } = req.body;
 
   if (!pdfUrl || !apiKey) {
-    return res
-      .status(400)
-      .json({ status: 'error', error: 'Please provide both pdfUrl and apiKey' });
+    return res.status(400).json({
+      status: 'error',
+      error: 'Please provide both pdfUrl and apiKey',
+    });
   }
 
   // Validate the provided URL
@@ -31,10 +32,14 @@ app.post('/processPaper', async (req, res) => {
     if (!pdfUrl.endsWith('.pdf')) {
       correctedUrl = pdfUrl + '.pdf';
       if (!isArxivPdfUrl(correctedUrl)) {
-        return res.status(400).json({ status: 'error', error: 'Invalid arXiv PDF URL provided.' });
+        return res
+          .status(400)
+          .json({ status: 'error', error: 'Invalid arXiv PDF URL provided.' });
       }
     } else {
-      return res.status(400).json({ status: 'error', error: 'Invalid arXiv PDF URL provided.' });
+      return res
+        .status(400)
+        .json({ status: 'error', error: 'Invalid arXiv PDF URL provided.' });
     }
     pdfUrl = correctedUrl;
   }
@@ -43,7 +48,7 @@ app.post('/processPaper', async (req, res) => {
     // Initialize PaperProcessor
     const processor = new PaperProcessor(apiKey);
 
-    // Process the initial paper without processing references
+    // Process the initial paper
     const [allText, imagesList] = await processor.processInitialPaper(pdfUrl);
 
     if (!allText) {
@@ -66,97 +71,15 @@ app.post('/processPaper', async (req, res) => {
   }
 });
 
-// Endpoint to process references
-app.post('/processReferences', async (req, res) => {
-  const { apiKey, processorId } = req.body;
-
-  if (!apiKey || !processorId) {
-    return res
-      .status(400)
-      .json({ status: 'error', error: 'Please provide apiKey and processorId' });
-  }
-
-  try {
-    const processor = paperProcessors[processorId];
-
-    if (!processor) {
-      throw new Error('No processor found for the given processorId.');
-    }
-
-    // Ensure the API key matches
-    if (processor.apiKey !== apiKey) {
-      throw new Error('Invalid API key for the provided processorId.');
-    }
-
-    // Process references
-    await processor.processReferences();
-
-    // Save data
-    processor.saveData();
-
-    // Prepare list of references
-    const references = processor.allReferencesData.map(ref => ({
-      arxivId: ref.arxivId || null,
-      referenceTitle: ref.reference.substring(0, 100), // Limit length
-    }));
-
-    res.json({
-      status: 'success',
-      message: 'References processed successfully.',
-      references: references,
-    });
-  } catch (error) {
-    console.error('Error processing references:', error);
-    res.status(500).json({ status: 'error', error: error.message });
-  }
-});
-
-// Endpoint to get processed paper data
-app.get('/getPaperData', (req, res) => {
-  const { apiKey, processorId, arxivId } = req.query;
-
-  if (!apiKey || !processorId || !arxivId) {
-    return res
-      .status(400)
-      .json({ status: 'error', error: 'Please provide apiKey, processorId, and arxivId' });
-  }
-
-  try {
-    const processor = paperProcessors[processorId];
-
-    if (!processor) {
-      throw new Error('No processor found for the given processorId.');
-    }
-
-    // Ensure the API key matches
-    if (processor.apiKey !== apiKey) {
-      throw new Error('Invalid API key for the provided processorId.');
-    }
-
-    const paperData = processor.getPaperData(arxivId);
-
-    if (!paperData) {
-      throw new Error('No paper data found for the provided arXiv ID.');
-    }
-
-    res.json({
-      status: 'success',
-      paperData: paperData,
-    });
-  } catch (error) {
-    console.error('Error getting paper data:', error);
-    res.status(500).json({ status: 'error', error: error.message });
-  }
-});
-
 // Endpoint to serve images
 app.get('/getImage', (req, res) => {
   const { processorId, imagePath } = req.query;
 
   if (!processorId || !imagePath) {
-    return res
-      .status(400)
-      .json({ status: 'error', error: 'Please provide processorId and imagePath' });
+    return res.status(400).json({
+      status: 'error',
+      error: 'Please provide processorId and imagePath',
+    });
   }
 
   try {
