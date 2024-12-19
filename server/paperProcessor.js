@@ -230,27 +230,32 @@ class LinkFinder {
 
   async findReferencePdfs(referencesList) {
     const referencesData = [];
-
+  
     for (let idx = 0; idx < referencesList.length; idx++) {
       const reference = referencesList[idx];
       console.log(`Processing reference ${idx + 1}: ${reference}`);
       const arxivPdfLink = await this.findArxivPdfLinkForReference(reference);
-
+  
       const cleanedPdfLink = arxivPdfLink || 'Not found';
-
+  
+      let arxivId = null;
+      if (arxivPdfLink && arxivPdfLink !== 'Not found') {
+        arxivId = getArxivIdFromUrl(arxivPdfLink);
+      }
+  
       // Store the data
       referencesData.push({
         reference: reference,
-        arxiv_pdf_link: cleanedPdfLink
+        arxiv_pdf_link: cleanedPdfLink,
+        arxivId: arxivId,
       });
-
+  
       // Log the search results
       console.log(`arXiv PDF link found: ${cleanedPdfLink}`);
     }
-
+  
     return referencesData;
   }
-}
 
 // PaperProcessor class
 class PaperProcessor {
