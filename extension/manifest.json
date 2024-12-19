@@ -1,0 +1,23 @@
+{
+    "manifest_version": 3,
+    "name": "Paper Processor Extension",
+    "version": "1.0",
+    "description": "Processes papers and extracts text and images.",
+    "permissions": [
+      "storage",
+      "activeTab",
+      "scripting"
+    ],
+    "host_permissions": [
+      "http://localhost/*",
+      "https://arxiv.org/*",
+      "https://api.openai.com/*"
+    ],
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "content_security_policy": {
+      "extension_pages": "script-src 'self'; object-src 'self';"
+    }
+  }
+  
